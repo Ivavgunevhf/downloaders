@@ -19,31 +19,33 @@
 
 //----------
 jQuery(function() {
-	// Create the hidden textarea for the output
-	jQuery('body').prepend('<textarea id="downloaded_works"></textarea><textarea id="downloaded_works_names"></textarea>');
-	jQuery('#downloaded_works,#downloaded_works_names').hide();
+	if (jQuery('#ao3_downloader').length==0) { // Doesnt exist
+		// Create the hidden textarea for the output
+		jQuery('body').prepend('<textarea id="downloaded_works"></textarea><textarea id="downloaded_works_names"></textarea>');
+		jQuery('#downloaded_works,#downloaded_works_names').hide();
 
-	jQuery('head').append('<style id="ao3_downloader_css">#ao3_downloader{border:1px solid;padding:15px;}.do_not_download{opacity:0.3;}</style>');
+		jQuery('head').append('<style id="ao3_downloader_css">#ao3_downloader{border:1px solid;padding:15px;}.do_not_download{opacity:0.3;}</style>');
 
-	jQuery('#main').prepend('<div id="ao3_downloader"><h2>AO3 Downloader by <a href="https://github.com/Ivavgunevhf/downloaders/">ivavgunevhf</a></h2><p><strong>What does this tool do?</strong><br>--> It quickly downloads all the works seen on the page.<br>--> It also downloads two text files.<br>----> A text file with the work&apos;s title and the author&apos;s name.<br>----> A more detailed file about the work&apos;s title, author, and summary.<br><br><strong>Important</strong>: <br>--> Please <u>allow for multiple downloads</u> and <u>allow for pop-ups</u> when using this tool. <br>----> Because of the nature of how this code works, you must allow for pop-ups because this code opens multiple windows to the downloads.<br>----> Likewise, the multiple downloads is to allow the files to be downloaded to your computer.<br><br><strong>Tips:</strong><br>1. Set the downloads location to the correct folder before using this tool. (or plan on picking files out of your downloads folder for months)<br>2. Use the filters to remove the works you dont want to accidently download. (Curate the works before downloading everything.)<br>---> Use the "Exclude this work from the download" button to remove the work from the downloads list. (Excluded works are more transparent and greyed out.)</p>Download as: <select name="download_type" id="download_type" style="width: auto;vertical-align: middle;"><option value="html">html</option><option value="epub">epub</option><option value="pdf">pdf</option><option value="mobi">mobi</option><option value="azw3">azw3</option></select> <button id="downloader_button">Download the works on this page</button></div>');
+		jQuery('#main').prepend('<div id="ao3_downloader"><h2>AO3 Downloader by <a href="https://github.com/ivavgunevhf">ivavgunevhf</a></h2><p><strong>What does this tool do?</strong><br>--> It quickly downloads all the works seen on the page.<br>--> It also downloads two text files.<br>----> A text file with the work&apos;s title and the author&apos;s name.<br>----> A more detailed file about the work&apos;s title, author, and summary.<br><br><strong>Important</strong>: <br>--> Please <u>allow for multiple downloads</u> and <u>allow for pop-ups</u> when using this tool. <br>----> Because of the nature of how this code works, you must allow for pop-ups because this code opens multiple windows to the downloads.<br>----> Likewise, the multiple downloads is to allow the files to be downloaded to your computer.<br><br><strong>Tips:</strong><br>1. Set the downloads location to the correct folder before using this tool. (or plan on picking files out of your downloads folder for months)<br>2. Use the filters to remove the works you dont want to accidently download. (Curate the works before downloading everything.)<br>---> Use the "Exclude this work from the download" button to remove the work from the downloads list. (Excluded works are more transparent and greyed out.)</p>Download as: <select name="download_type" id="download_type" style="width: auto;vertical-align: middle;"><option value="html">html</option><option value="epub">epub</option><option value="pdf">pdf</option><option value="mobi">mobi</option><option value="azw3">azw3</option></select> <button id="downloader_button">Download the works on this page</button></div>');
 
-	jQuery('li.work').each(function(){
-		jQuery(this).prepend('<button class="downloadable_toggler">Exclude this work from the download</button>');
-	});
+		jQuery('li.work').each(function(){
+			jQuery(this).prepend('<button class="downloadable_toggler">Exclude this work from the download</button>');
+		});
 
-	// Add listeners
-	jQuery(document).on("click", ".downloadable_toggler", function() {
-		if(jQuery(this).text()==='Exclude this work from the download') {
-			jQuery(this).parent().addClass('do_not_download');
-			jQuery(this).text('Undo - Include this work in the download');
-		} else {
-			jQuery(this).parent().removeClass('do_not_download');
-			jQuery(this).text('Exclude this work from the download');
-		}
-	});
-	jQuery(document).on("click", "#downloader_button", function() {
-		AO3Download(jQuery('#download_type option:selected').val());
-	});
+		// Add listeners
+		jQuery(document).on("click", ".downloadable_toggler", function() {
+			if(jQuery(this).text()==='Exclude this work from the download') {
+				jQuery(this).parent().addClass('do_not_download');
+				jQuery(this).text('Undo - Include this work in the download');
+			} else {
+				jQuery(this).parent().removeClass('do_not_download');
+				jQuery(this).text('Exclude this work from the download');
+			}
+		});
+		jQuery(document).on("click", "#downloader_button", function() {
+			AO3Download(jQuery('#download_type option:selected').val());
+		});	
+	}
 });
 
 

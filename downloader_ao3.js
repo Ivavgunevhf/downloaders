@@ -2,7 +2,7 @@
 // REQUIRES: jQuery
 // the rest of the code if you dont already have it
 
-// Date: Aug 1, 2020
+// Date: Aug 28, 2020
 
 // AO3 supports: .html | .epub | .pdf | .mobi | .awz3
 // This code saves work as .html but replace .html with your
@@ -25,7 +25,7 @@ jQuery(function() {
 
 	jQuery('head').append('<style id="ao3_downloader_css">#ao3_downloader{border:1px solid;padding:15px;}.do_not_download{opacity:0.3;}</style>');
 
-	jQuery('#main').prepend('<div id="ao3_downloader"><h2>AO3 Downloader by <a href="https://github.com/ivavgunevhf">ivavgunevhf</a></h2><p><strong>What does this tool do?</strong><br>--> It quickly downloads all the works seen on the page.<br>--> It also downloads two text files.<br>----> A text file with the work&apos;s title and the author&apos;s name.<br>----> A more detailed file about the work&apos;s title, author, and summary.<br><br><strong>Important</strong>: <br>--> Please <u>allow for multiple downloads</u> and <u>allow for pop-ups</u> when using this tool. <br>----> Because of the nature of how this code works, you must allow for pop-ups because this code opens multiple windows to the downloads.<br>----> Likewise, the multiple downloads is to allow the files to be downloaded to your computer.<br><br><strong>Tips:</strong><br>1. Set the downloads location to the correct folder before using this tool. (or plan on picking files out of your downloads folder for months)<br>2. Use the filters to remove the works you dont want to accidently download. (Curate the works before downloading everything.)<br>---> Use the "Exclude this work from the download" button to remove the work from the downloads list. (Excluded works are more transparent and greyed out.)</p><button id="downloader_button">Download the works on this page</button></div>');
+	jQuery('#main').prepend('<div id="ao3_downloader"><h2>AO3 Downloader by <a href="https://github.com/ivavgunevhf">ivavgunevhf</a></h2><p><strong>What does this tool do?</strong><br>--> It quickly downloads all the works seen on the page.<br>--> It also downloads two text files.<br>----> A text file with the work&apos;s title and the author&apos;s name.<br>----> A more detailed file about the work&apos;s title, author, and summary.<br><br><strong>Important</strong>: <br>--> Please <u>allow for multiple downloads</u> and <u>allow for pop-ups</u> when using this tool. <br>----> Because of the nature of how this code works, you must allow for pop-ups because this code opens multiple windows to the downloads.<br>----> Likewise, the multiple downloads is to allow the files to be downloaded to your computer.<br><br><strong>Tips:</strong><br>1. Set the downloads location to the correct folder before using this tool. (or plan on picking files out of your downloads folder for months)<br>2. Use the filters to remove the works you dont want to accidently download. (Curate the works before downloading everything.)<br>---> Use the "Exclude this work from the download" button to remove the work from the downloads list. (Excluded works are more transparent and greyed out.)</p>Download as: <select name="download_type" id="download_type" style="width: auto;vertical-align: middle;"><option value="html">html</option><option value="epub">epub</option><option value="pdf">pdf</option><option value="mobi">mobi</option><option value="awz3">awz3</option></select> <button id="downloader_button">Download the works on this page</button></div>');
 
 	jQuery('li.work').each(function(){
 		jQuery(this).prepend('<button class="downloadable_toggler">Exclude this work from the download</button>');
@@ -33,21 +33,21 @@ jQuery(function() {
 
 	// Add listeners
 	jQuery(document).on("click", ".downloadable_toggler", function() {
-		   if(jQuery(this).text()==='Exclude this work from the download') {
-				jQuery(this).parent().addClass('do_not_download');
-				jQuery(this).text('Undo - Include this work in the download');
-			} else {
-				jQuery(this).parent().removeClass('do_not_download');
-				jQuery(this).text('Exclude this work from the download');
-			}
+		if(jQuery(this).text()==='Exclude this work from the download') {
+			jQuery(this).parent().addClass('do_not_download');
+			jQuery(this).text('Undo - Include this work in the download');
+		} else {
+			jQuery(this).parent().removeClass('do_not_download');
+			jQuery(this).text('Exclude this work from the download');
+		}
 	});
 	jQuery(document).on("click", "#downloader_button", function() {
-		AO3Download();
+		AO3Download(jQuery('#download_type option:selected').val());
 	});
 });
 
 
-function AO3Download() {
+function AO3Download(type) {
 	// For Each
 	jQuery('li.work').each(function(){
 		if (jQuery(this).hasClass('do_not_download')!==true) {
@@ -68,7 +68,7 @@ function AO3Download() {
 			//download_link = 'http://download.archiveofourown.org/downloads/'+id+'/'+title.replace(/ /g,"%20").replace(/'|:|\"|!|\.|\?/g,"")+'.html';
 			
 			// This might be more reliable? bc ao3 doesnt seem to care what i place there.
-			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.html';
+			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type;
 			
 			jQuery('#downloaded_works').val(jQuery('#downloaded_works').val()+byline+'\n'+summary+'\nAo3 id:'+id+'\n---------\n');
 			jQuery('#downloaded_works_names').val(jQuery('#downloaded_works_names').val()+title+' by '+author+'\n');
@@ -107,7 +107,7 @@ function download(data, filename, type) {
 		a.click();
 		setTimeout(function() {
 			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);  
+			window.URL.revokeObjectURL(url);
 		}, 0); 
 	}
 }

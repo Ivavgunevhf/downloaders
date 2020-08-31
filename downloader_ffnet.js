@@ -5,7 +5,7 @@
 // Get the things ready for the big show
 $('body *').addClass('hidden_temp');
 $('body').append('<style class="fanfiction_downloader">.hidden_temp{display:none;}.story_section{border:1px solid;padding:25px;}.fanfiction_downloader{margin: 25px;}.downloader_hidden{display:none;}#downloader_links{width:95%;height:250px}.story_section h2 {font-size:14px!important}</style>');
-$('body').append('<div class="fanfiction_downloader"><h2>FanFiction Downloader by <a href="https://github.com/Ivavgunevhf/downloaders">Ivavgunevhf</a> | <span onclick="resetPage();" style="color:orange;text-decoration:underline;cursor:pointer;">Close</span></h2><p><strong>How To: </strong><br>- Paste the ffnet link into the textbox.<br>- For more than one, story return the line, and then paste the other link.<br></p><h3>Fic Links to Download:</h3><textarea id="downloader_links"></textarea> <button onclick="run()">RUN THE CODE</button> | <button onclick="$(\'.story_section button\').each(function(){$(this).click();})">DOWNLOAD ALL</button> (Wait a few before clicking!) | <button onclick="clearEntry();">Clear Downloads</button></div>');
+$('body').append('<div class="fanfiction_downloader"><h2>FanFiction Downloader by <a href="https://github.com/Ivavgunevhf/downloaders">Ivavgunevhf</a> | <span onclick="resetPage();" style="color:orange;text-decoration:underline;cursor:pointer;">Close</span></h2><p><strong>How To: </strong><br>- Paste the ffnet link into the textbox.<br>- For more than one, story return the line, and then paste the other link.<br>- If you get an error on download, its because the validation file check failed and chapters might be missing. Try again after a minute.<br>---> If the error doesnt go away, the code likely bugged out. (OOPS)<br>-----> Debug: $(\'.downloader_hidden\').show();<br>------> Dear LORD the TEXTAREAS!!!!</p><h3>Fic Links to Download:</h3><textarea id="downloader_links"></textarea> <button onclick="run()">RUN THE CODE</button> | <button onclick="$(\'.story_section button\').each(function(){$(this).click();})">DOWNLOAD ALL</button> (Wait a few before clicking!) | <button onclick="clearEntry();">Clear Downloads</button></div>');
 
 function resetPage() {
 	$('body *').removeClass('hidden_temp');
@@ -56,28 +56,33 @@ function getStory(url, id){
 	.then(function(html) {
 		var parser = new DOMParser();
 		var doc = parser.parseFromString(html, "text/html");
-		var numberOfChapters = doc.querySelectorAll('#chap_select option').length/2; // divison by 2; bc ffnet has two chapter selctors.
-		
-			if (numberOfChapters==0){numberOfChapters=1;}
-		
-		doc.querySelector('#profile_top button').remove(); // remove this then get the text.
-		var storyInfo = doc.querySelector('#profile_top').textContent.replace(/ +/g,' ');
-		var title = doc.querySelector('#profile_top b').textContent;
-		var author = doc.querySelector('#profile_top a').textContent;
-		var author_link = doc.querySelector('#profile_top a').href;
-		var story_link = url+'/1/';
-		var html_start = '<!DOCTYPE html>\n<html>\n<head>\n\t<title>'+title+' by '+author+'</title>\n\t<style>#origin_info{text-align:center;}#summary{border:1px solid;padding:15px;margin:15px;}</style>\n</head>\n<body>\n\t<div id="origin_info">Orginally posted on FanFiction.Net at <a href="'+story_link+'">'+story_link+'</a> by <a href="'+author_link+'">'+author+'</a></div>\n\t';
-		//console.log(html_start);
-		$('#html_start'+id).val(html_start);
-		$('#html_start'+id).val($('#html_start'+id).val()+'<div id="summary">'+storyInfo.replace(/\n/g,'<br>')+'</div>\n');
-		// Update the header
-		$('#'+id).find('h2').append(' - <span class="title">'+title+'</span> <button onclick="combiner('+id+');if(checkFile('+id+','+numberOfChapters+')){downloadFic('+id+');}else{alert(\'Not ready yet!\')}">Download</button>');
-		for (var i=1;i<numberOfChapters+1;i++) { // BC this doesnt play nice make temp fields to hold the text before the great combining.
-			//console.log(url+'/'+i);
-			$('#'+id).append('<textarea id="Chapter_'+i+'_'+id+'" class="'+id+' downloader_hidden"></textarea>');
-			getChapter(url+'/'+i,'Chapter_'+i+'_'+id);
+		if (doc.querySelector('#profile_top button')!=null) { // Check that story still exists
+			var numberOfChapters = doc.querySelectorAll('#chap_select option').length/2; // divison by 2; bc ffnet has two chapter selctors.
+			
+				if (numberOfChapters==0){numberOfChapters=1;}
+			
+			doc.querySelector('#profile_top button').remove(); // remove this then get the text.
+			var storyInfo = doc.querySelector('#profile_top').textContent.replace(/ +/g,' ');
+			var title = doc.querySelector('#profile_top b').textContent;
+			var author = doc.querySelector('#profile_top a').textContent;
+			var author_link = doc.querySelector('#profile_top a').href;
+			var story_link = url+'/1/';
+			var html_start = '<!DOCTYPE html>\n<html>\n<head>\n\t<title>'+title+' by '+author+'</title>\n\t<style>#origin_info{text-align:center;}#summary{border:1px solid;padding:15px;margin:15px;}.storytext{margin:35px}</style>\n</head>\n<body>\n\t<div id="origin_info">Orginally posted on FanFiction.Net at <a href="'+story_link+'">'+story_link+'</a> by <a href="'+author_link+'">'+author+'</a></div>\n\t';
+			//console.log(html_start);
+			$('#html_start'+id).val(html_start);
+			$('#html_start'+id).val($('#html_start'+id).val()+'<div id="summary">'+storyInfo.replace(/\n/g,'<br>')+'</div>\n');
+			// Update the header
+			$('#'+id).find('h2').append(' - <span class="title">'+title+'</span> <button onclick="combiner('+id+');if(checkFile('+id+','+numberOfChapters+')){downloadFic('+id+');}else{alert(\''+title+' - Not ready yet!\')}">Download</button>');
+			for (var i=1;i<numberOfChapters+1;i++) { // BC this doesnt play nice make temp fields to hold the text before the great combining.
+				//console.log(url+'/'+i);
+				$('#'+id).append('<textarea id="Chapter_'+i+'_'+id+'" class="'+id+' downloader_hidden"></textarea>');
+				getChapter(url+'/'+i,'Chapter_'+i+'_'+id);
+			}
+			$('#'+id).append('<h3 class="downloader_hidden">End:</h3><textarea class="downloader_hidden" id="html_end_'+id+'">\n</body>\n&lt;!-- Delete the following script tag and everything in it to remove the warning! --&gt;\n\t&lt;script&gt;var t = document.getElementById(&apos;summary&apos;).textContent;if (t.indexOf(&apos;Chapters: &apos;)&gt;=0){console.log(t.split(&apos;Chapters: &apos;)[1].split(&apos; -&apos;)[0]);if (t.split(&apos;Chapters: &apos;)[1].split(&apos; -&apos;)[0]!=document.querySelectorAll(&apos;.stor&apos;+&apos;ytext&apos;).length){alert(&apos;Error there might be missing! - To remove this warning edit the file and remove warning js.&apos;);}}else{if(document.querySelectorAll(&apos;.stor&apos;+&apos;ytext&apos;).length&lt;1){alert(&apos;Error there might be missing! - To remove this warning edit the file and remove warning js.&apos;);}}&lt;/script&gt;\n&lt;!-- Do not delete pass this point. --&gt;\n</html></textarea>');
+		} else {
+			// Doesn't exist.
+			$('#'+id).find('h2').append(' - <a href="https://www.fanfiction.net/s/'+id+'/">This story</a> no longer exists!');
 		}
-		$('#'+id).append('<h3 class="downloader_hidden">End:</h3><textarea class="downloader_hidden" id="html_end_'+id+'">\n</body>\n&lt;!-- Delete the following script tag and everything in it to remove the warning! --&gt;\n\t&lt;script&gt;var t = document.getElementById(&apos;summary&apos;).textContent;if (t.indexOf(&apos;Chapters: &apos;)&gt;=0){console.log(t.split(&apos;Chapters: &apos;)[1].split(&apos; -&apos;)[0]);if (t.split(&apos;Chapters: &apos;)[1].split(&apos; -&apos;)[0]!=document.querySelectorAll(&apos;.stor&apos;+&apos;ytext&apos;).length){alert(&apos;Error there might be missing! - To remove this warning edit the file and remove warning js.&apos;);}}else{if(document.querySelectorAll(&apos;.stor&apos;+&apos;ytext&apos;).length&lt;1){alert(&apos;Error there might be missing! - To remove this warning edit the file and remove warning js.&apos;);}}&lt;/script&gt;\n&lt;!-- Do not delete pass this point. --&gt;\n</html></textarea>');
 	});
 }
 
@@ -124,7 +129,7 @@ function combiner(id) {
 }
 
 function checkFile(id,ch) {
-	if (($('#combined_'+id).val().match(/storytext/g) || []).length!=ch){
+	if ((($('#combined_'+id).val().match(/storytext/g) || []).length-1)!=ch){ // Minus one bc of the css. BC of the way i wrote the check things might break.
 		return false;
 	} else {
 		return true;

@@ -86,7 +86,7 @@ function AO3Download(type) {
 			//download_link = 'http://download.archiveofourown.org/downloads/'+id+'/'+title.replace(/ /g,"%20").replace(/'|:|\"|!|\.|\?/g,"")+'.html';
 			
 			// This might be more reliable? bc ao3 doesnt seem to care what i place there.
-			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type;
+			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type+'?updated_at=999999999999';
 			
 			jQuery('#downloaded_works').val(jQuery('#downloaded_works').val()+byline+'\n'+summary+'\nAo3 id:'+id+'\n---------\n');
 			jQuery('#downloaded_works_names').val(jQuery('#downloaded_works_names').val()+title+' by '+author+'\n');
@@ -125,7 +125,7 @@ function AO3Download(type) {
 			//download_link = 'http://download.archiveofourown.org/downloads/'+id+'/'+title.replace(/ /g,"%20").replace(/'|:|\"|!|\.|\?/g,"")+'.html';
 			
 			// This might be more reliable? bc ao3 doesnt seem to care what i place there.
-			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type;
+			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type+'?updated_at=999999999999';
 			
 			jQuery('#downloaded_works').val(jQuery('#downloaded_works').val()+byline+'\n'+summary+'\nAo3 id:'+id+'\n---------\n');
 			jQuery('#downloaded_works_names').val(jQuery('#downloaded_works_names').val()+title+' by '+author+'\n');

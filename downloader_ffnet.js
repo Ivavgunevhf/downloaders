@@ -72,7 +72,7 @@ function getStory(url, id){
 			$('#html_start'+id).val(html_start);
 			$('#html_start'+id).val($('#html_start'+id).val()+'<div id="summary">'+storyInfo.replace(/\n/g,'<br>')+'</div>\n');
 			// Update the header
-			$('#'+id).find('h2').append(' - <span class="title">'+title+'</span> <button onclick="combiner('+id+');if(checkFile('+id+','+numberOfChapters+')){downloadFic('+id+');}else{alert(\''+title.replace(/'/g, '')+' - Not ready yet!\')}">Download</button>');
+			$('#'+id).find('h2').append(' - <span class="title">'+title+' by '+author+'</span> <button onclick="combiner('+id+');if(checkFile('+id+','+numberOfChapters+')){downloadFic('+id+');}else{alert(\''+title.replace(/'/g, '')+' - Not ready yet!\')}">Download</button>');
 			for (var i=1;i<numberOfChapters+1;i++) { // BC this doesnt play nice make temp fields to hold the text before the great combining.
 				//console.log(url+'/'+i);
 				$('#'+id).append('<textarea id="Chapter_'+i+'_'+id+'" class="'+id+' downloader_hidden"></textarea>');

@@ -78,28 +78,37 @@ function AO3Download(type) {
 			var byline = jQuery(this).find('h4.heading').first().text().replace(/\r?\n|\r|»/g,"").replace(/\s\s+/g, ' ').trim(); // Yeah regex is messy but whatever
 			var summary = jQuery(this).find('.summary').text();
 
-			
-			// AO3 Downloads currently works as this, so far i cant tell the differnce from not having the title name there but 
-			// I might as well have it there just in case. I think rwqerjklo.html would also continue to work for it with the 
-			// id but meh.
-			
-			//download_link = 'http://download.archiveofourown.org/downloads/'+id+'/'+title.replace(/ /g,"%20").replace(/'|:|\"|!|\.|\?/g,"")+'.html';
-			
-			// This might be more reliable? bc ao3 doesnt seem to care what i place there.
-			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type+'?updated_at=999999999999';
-			
+			switch(type) {
+				case 'html':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(4).attr('href'),'_blank');
+					});
+				break;
+				case 'epub':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(1).attr('href'),'_blank');
+					});
+				break;
+				case 'pdf':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(3).attr('href'),'_blank');
+					});
+				break;
+				case 'mobi':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(2).attr('href'),'_blank');
+					});
+				break;
+				case 'azw3':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(0).attr('href'),'_blank');
+					});
+				break;
+			}
+		
 			jQuery('#downloaded_works').val(jQuery('#downloaded_works').val()+byline+'\n'+summary+'\nAo3 id:'+id+'\n---------\n');
 			jQuery('#downloaded_works_names').val(jQuery('#downloaded_works_names').val()+title+' by '+author+'\n');
 
-			// Display in the console
-			//console.log(title, download_link, id);
-			
-			// !!! IMPORTANT !!!
-
-
-			// bc of the window open command, you must allow for popups on the site
-			// command is commented out bc i dont want autorun when debugging remove the // from the next line to make it run.
-				window.open(download_link,'_blank');
 		}
 	});
 
@@ -117,27 +126,37 @@ function AO3Download(type) {
 			var byline = jQuery(this).find('h4.heading').first().text().replace(/\r?\n|\r|»/g,"").replace(/\s\s+/g, ' ').trim(); // Yeah regex is messy but whatever
 			var summary = jQuery(this).find('.summary').text();
 
-			
-			// AO3 Downloads currently works as this, so far i cant tell the differnce from not having the title name there but 
-			// I might as well have it there just in case. I think rwqerjklo.html would also continue to work for it with the 
-			// id but meh.
-			
-			//download_link = 'http://download.archiveofourown.org/downloads/'+id+'/'+title.replace(/ /g,"%20").replace(/'|:|\"|!|\.|\?/g,"")+'.html';
-			
-			// This might be more reliable? bc ao3 doesnt seem to care what i place there.
-			var download_link = 'http://download.archiveofourown.org/downloads/'+id+'/somerandomunimportantname.'+type+'?updated_at=999999999999';
+			switch(type) {
+				case 'html':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(4).attr('href'),'_blank');
+					});
+				break;
+				case 'epub':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(1).attr('href'),'_blank');
+					});
+				break;
+				case 'pdf':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(3).attr('href'),'_blank');
+					});
+				break;
+				case 'mobi':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(2).attr('href'),'_blank');
+					});
+				break;
+				case 'azw3':
+					$.get('https://archiveofourown.org/works/'+id, function(data){
+						window.open('https://archiveofourown.org'+$(data).find('.download li a').eq(0).attr('href'),'_blank');
+					});
+				break;
+			}
 			
 			jQuery('#downloaded_works').val(jQuery('#downloaded_works').val()+byline+'\n'+summary+'\nAo3 id:'+id+'\n---------\n');
 			jQuery('#downloaded_works_names').val(jQuery('#downloaded_works_names').val()+title+' by '+author+'\n');
 
-			// Display in the console
-			console.log(title, download_link, id);
-			
-			// !!! IMPORTANT !!!
-
-			// bc of the window open command, you must allow for popups on the site
-			// command is commented out bc i dont want autorun when debugging remove the // from the next line to make it run.
-				window.open(download_link,'_blank');
 		}
 	});
 	// Download the info

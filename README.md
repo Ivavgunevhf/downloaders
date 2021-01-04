@@ -20,3 +20,13 @@ How To Use:
 - Copy and Paste the code into when on the correct page / website.
 
 - Read the rest of the instructions on the page if and when the tool runs.
+
+Known Issues: (Might never get around to fixing these.)
+
+--> Using the tool too many times causes 429 Errors as you have made too many request in a short time using your IP.
+
+---> Add a limit or cool down.
+
+--> FFNet specific error regarding special symbols and other languages when downloading/constucting the fic. 
+
+---> Doesnt like Russian at all and will corrupt characters. Also causes errors with things like checkmark symbols. 

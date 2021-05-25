@@ -30,3 +30,17 @@ Known Issues: (Might never get around to fixing these.)
 --> FFNet specific error regarding special symbols and other languages when downloading/constucting the fic. 
 
 ---> Doesnt like Russian at all and will corrupt characters. Also causes errors with things like checkmark symbols. 
+
+```js
+if (location.href.indexOf("archiveofourown.org")>=0) {
+	var s = document.createElement("script");
+	s.type = "text/javascript";
+	s.src = "https://cdn.jsdelivr.net/gh/Ivavgunevhf/downloaders/downloader_ao3.js";
+	$("head").append(s);
+} else if (location.href.indexOf("fanfiction.net")>=0) {
+	var s = document.createElement("script");
+	s.type = "text/javascript";
+	s.src = "https://cdn.jsdelivr.net/gh/Ivavgunevhf/downloaders/master/downloader_ffnet.js";
+	$("head").append(s);
+}
+```

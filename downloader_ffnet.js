@@ -1,11 +1,14 @@
 // Uses: jQuery
 // For: fanfiction.net
-// Date: August 29, 2020
+// Date: May 25, 2021
 
 // Get the things ready for the big show
 $('body *').addClass('hidden_temp');
 $('body').append('<style class="fanfiction_downloader">.hidden_temp{display:none;}.story_section{border:1px solid;padding:25px;}.fanfiction_downloader{margin: 25px;}.downloader_hidden{display:none;}#downloader_links{width:95%;height:250px}.story_section h2 {font-size:14px!important}</style>');
 $('body').append('<div class="fanfiction_downloader"><h2>FanFiction Downloader by <a href="https://github.com/Ivavgunevhf/downloaders">Ivavgunevhf</a> | <span onclick="resetPage();" style="color:orange;text-decoration:underline;cursor:pointer;">Close</span></h2><p><strong>How To: </strong><br>- Paste the ffnet link into the textbox.<br>- For more than one, story return the line, and then paste the other link.<br>- If you get an error on download, its because the validation file check failed and chapters might be missing. Try again after a minute.<br>---> If the error doesnt go away, the code likely bugged out. (OOPS)<br>-----> Debug: $(\'.downloader_hidden\').show();<br>------> Dear LORD the TEXTAREAS!!!!</p><h3>Fic Links to Download:</h3><textarea id="downloader_links"></textarea> <button onclick="run()">RUN THE CODE</button> | <button onclick="$(\'.story_section button\').each(function(){$(this).click();})">DOWNLOAD ALL</button> (Wait a few before clicking!) | <button onclick="clearEntry();">Clear Downloads</button></div>');
+
+var ficQueue = [];
+var cached = [];
 
 function resetPage() {
 	$('body *').removeClass('hidden_temp');
@@ -40,12 +43,17 @@ function run() {
 			getStory('https://www.fanfiction.net/s/'+story_ID, story_ID);
 		}
 	}
+	checkQueue();
 }
 
 function getStoryId(url) {
 	if (url!=''&&url.indexOf('/s/')>=0&&url.indexOf('fanfiction.net')>=0) {
 		return url.split('/s/')[1].split('/')[0];
 	}
+}
+
+function queueFics(url) {
+	if (ficQueue.indexOf(url)==-1) {ficQueue.push(url);}
 }
 
 function getStory(url, id){
@@ -76,7 +84,7 @@ function getStory(url, id){
 			for (var i=1;i<numberOfChapters+1;i++) { // BC this doesnt play nice make temp fields to hold the text before the great combining.
 				//console.log(url+'/'+i);
 				$('#'+id).append('<textarea id="Chapter_'+i+'_'+id+'" class="'+id+' downloader_hidden"></textarea>');
-				getChapter(url+'/'+i,'Chapter_'+i+'_'+id);
+				queueFics(url+'/'+i);
 			}
 			$('#'+id).append('<h3 class="downloader_hidden">End:</h3><textarea class="downloader_hidden" id="html_end_'+id+'">\n</body>\n&lt;!-- Delete the following script tag and everything in it to remove the warning! --&gt;\n\t&lt;script&gt;var t = document.getElementById(&apos;summary&apos;).textContent;if (t.indexOf(&apos;Chapters: &apos;)&gt;=0){console.log(t.split(&apos;Chapters: &apos;)[1].split(&apos; -&apos;)[0]);if (t.split(&apos;Chapters: &apos;)[1].split(&apos; -&apos;)[0]!=document.querySelectorAll(&apos;.stor&apos;+&apos;ytext&apos;).length){alert(&apos;Error there might be missing! - To remove this warning edit the file and remove warning js.&apos;);}}else{if(document.querySelectorAll(&apos;.stor&apos;+&apos;ytext&apos;).length&lt;1){alert(&apos;Error there might be missing! - To remove this warning edit the file and remove warning js.&apos;);}}&lt;/script&gt;\n&lt;!-- Do not delete pass this point. --&gt;\n</html></textarea>');
 		} else {
@@ -86,12 +94,51 @@ function getStory(url, id){
 	});
 }
 
+function runQueue() {
+	var timer = setInterval(function(){
+		if(ficQueue.length>0){
+			stepQueue();
+		}
+	}, 500);
+}
+
+function checkQueue() {
+	var i=0;
+	var timer = setInterval(function(){
+		console.log('Checking queue');
+		if(ficQueue.length>0){
+			console.log('>>> Queue has items');
+			runQueue();
+		} else {
+			console.log('>>> Queue is empty');
+			i++;
+		}
+		if(i==10) {
+			clearInterval(timer);
+			console.log('Queue has been empty for too long. Stopping call.');
+		}
+	}, 3000);
+}
+
+function stepQueue() {
+	var theChapterUrl = ficQueue.pop();
+	var id = getStoryId(theChapterUrl);
+	var chapterNumber = theChapterUrl.split(id+'/')[1];
+	//console.log(theChapterUrl,'Chapter_'+chapterNumber+'_'+id);
+	getChapter(theChapterUrl,'Chapter_'+chapterNumber+'_'+id);
+}
 
 // Fetch chapter text
 function getChapter(url,el) {
 	fetch(url)
 	.then(function(response) {
 		// When the page is loaded convert it to text
+		if(response.ok) {
+			// Mark it off.
+			cached.push(url);
+		} else {
+			throw new Error('Network response was not ok');
+		}
 		return response.text();
 	})
 	.then(function(html) {
@@ -110,6 +157,8 @@ function getChapter(url,el) {
 			$('#'+el).val('\t<div class="storytext" id="'+el+'">'+chapter_text+'</div>\n');
 			//console.log(chapter_text);
 		}
+	}).catch(error => {
+		console.error('There has been a problem with your fetch operation:', error);
 	});
 }
 
@@ -137,7 +186,7 @@ function checkFile(id,ch) {
 }
 
 function downloadFic(id) {
-	download($('#combined_'+id).val(),$('#'+id+' span').text(),'text/html');
+	download($('#combined_'+id).val(),$('#'+id+' span').text()+'.html','text/html');
 }
 
 // Function to download data to a file

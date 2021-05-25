@@ -40,7 +40,7 @@ if (location.href.indexOf("archiveofourown.org")>=0) {
 } else if (location.href.indexOf("fanfiction.net")>=0) {
 	var s = document.createElement("script");
 	s.type = "text/javascript";
-	s.src = "https://cdn.jsdelivr.net/gh/Ivavgunevhf/downloaders/master/downloader_ffnet.js";
+	s.src = "https://cdn.jsdelivr.net/gh/Ivavgunevhf/downloaders/downloader_ffnet.js";
 	$("head").append(s);
 }
 ```

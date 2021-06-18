@@ -162,8 +162,8 @@ function AO3Download(type) {
 	// Download the info
 	// Summaries are the title and the summary data
 	// TITLES are just the title no other info NO author names. 
-	download(jQuery('#downloaded_works').val(),'_SUMMARIES_'+new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString(),'text/plain');
-	download(jQuery('#downloaded_works_names').val(),'_TITLES_'+new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString(),'text/plain');
+	//download(jQuery('#downloaded_works').val(),'_SUMMARIES_'+new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString(),'text/plain');
+	//download(jQuery('#downloaded_works_names').val(),'_TITLES_'+new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString(),'text/plain');
 }
 
 // Function to download data to a file

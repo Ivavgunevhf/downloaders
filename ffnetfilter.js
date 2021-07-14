@@ -10,7 +10,7 @@ if(localStorage.getItem('hide_ignored_stories')||localStorage.getItem('hide_igno
 
 var characterList = $('select[name="characterid1"]').html();
 
-$('span:contains("Filters")').after('<span class="lc"><span onclick="$(\'#ffnet_extended_modal\').modal();" class="btn">Filter Extended</span></span>');
+$('.btn:contains("Filters")').after('<span class="lc"><span onclick="$(\'#ffnet_extended_modal\').modal();" class="btn">Filter Extended</span></span>');
 
 $('body').append(`
 <div class="modal fade hide in" id="ffnet_extended_modal">

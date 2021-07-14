@@ -10,11 +10,11 @@ if(localStorage.getItem('hide_ignored_stories')||localStorage.getItem('hide_igno
 
 var characterList = $('select[name="characterid1"]').html();
 
-$('.lc-wrapper').append('<span class="lc"><span onclick="$(\'#ffnet_extended_modal\').modal();" class="btn">Filter Extended</span></span>');
+$('span:contains("Filters")').after('<span class="lc"><span onclick="$(\'#ffnet_extended_modal\').modal();" class="btn">Filter Extended</span></span>');
 
 $('body').append(`
 <div class="modal fade hide in" id="ffnet_extended_modal">
-<div class="modal-body">Choose Characters to Include as a Pairing [CharA, CharB] and mark the <span style="background:#32a848;color:#fff">background</span>
+<div class="modal-body"><h6>Filter Extender by <a href="https://github.com/Ivavgunevhf/downloaders/">Ivavgunevhf</a></h6>Choose Characters to Include as a Pairing [CharA, CharB] and mark the <span style="background:#32a848;color:#fff">background</span>
 <div style="height:10px"></div>
 
 <!-- When the user changes the select, it will update the acceptedStrings textarea -->

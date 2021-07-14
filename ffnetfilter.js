@@ -216,51 +216,45 @@ $('#content_wrapper_inner .z-list').each(function(){
 	$(this).attr('id',workID);
 	$(this).prepend('<span class="pull-right hide_work_button" style="background:red;color:#fff;" onclick="removeWorkFromView('+workID+');">Hide Work</span>');
 
-	// If the acceptedStrings is [""] it will false possitive results so make the array empty to not run.
-	if (localStorage.getItem('acceptedStrings') != '[\"\"]') {
-		var acceptedStrings = JSON.parse(localStorage.getItem('acceptedStrings'));
-	} else {
-		var acceptedStrings = [""];
-	}
+	var acceptedStrings = JSON.parse(localStorage.getItem('acceptedStrings'));
 
 	for (i=0; i<acceptedStrings.length; i++) {
-		var re = new RegExp(acceptedStrings[i], 'gi');
-		//console.log($(this).text().match(acceptedStrings[i])!=null);
-		if($(this).text().match(re)!=null){
-			$(this).css('background','#32a848').addClass('check_passed');//Green
+		// If the acceptedStrings is "" it will false possitive results.
+		if (acceptedStrings[i] != "") {
+			var re = new RegExp(acceptedStrings[i], 'gi');
+			//console.log($(this).text().match(acceptedStrings[i])!=null);
+			if($(this).text().match(re)!=null){
+				$(this).css('background','#32a848').addClass('check_passed');//Green
+			}
 		}
 	}
 
 	// Includes works with only the two characters 
 	// and Pairing with them and someone else like a [CharA, CharB, CharC]
 
-	// If the possibleStrings is [""] it will false possitive results so make the array empty to not run.
-	if (localStorage.getItem('possibleStrings') != '[\"\"]') {
-		var possibleStrings = JSON.parse(localStorage.getItem('possibleStrings'));
-	} else {
-		var possibleStrings = [];
-	}
+	// If the acceptedStrings is "" it will false possitive results.
+	var possibleStrings = JSON.parse(localStorage.getItem('possibleStrings'));
 
 	for (i=0; i<possibleStrings.length; i++) {
-		var re = new RegExp(possibleStrings[i], 'gi');
-		//console.log($(this).text().match(re)!=null);
-		if($(this).text().match(possibleStrings[i])!=null&&!$(this).hasClass('check_passed')){
-			$(this).css('background','#5ab96c').css('opacity','.95');
+		if (possibleStrings[i] != "") {
+			var re = new RegExp(possibleStrings[i], 'gi');
+			//console.log($(this).text().match(re)!=null);
+			if($(this).text().match(possibleStrings[i])!=null&&!$(this).hasClass('check_passed')){
+				$(this).css('background','#5ab96c').css('opacity','.95');
+			}
 		}
 	}
 
-	// If the rejectedStrings is [""] it will false possitive results so make the array empty to not run.
-	if (localStorage.getItem('rejectedStrings') != '[\"\"]') {
-		var rejectedStrings = JSON.parse(localStorage.getItem('rejectedStrings'));
-	} else {
-		var rejectedStrings = [];
-	}
+	// If the rejectedStrings is "" it will false possitive results.
+	var rejectedStrings = JSON.parse(localStorage.getItem('rejectedStrings'));
 
 	for (i=0; i<rejectedStrings.length; i++) {
-		//console.log($(this).text().match(rejectedStrings[i])!=null);
-		if($(this).text().match(rejectedStrings[i])!=null&&!$(this).hasClass('check_passed')){
-			$(this).css('background','#ff8080').css('opacity','.5');
-			if(localStorage.getItem('hide_restricted')||localStorage.getItem('hide_restricted')=="true"){$(this).hide();}
+		if (rejectedStrings[i] != "") {
+			//console.log($(this).text().match(rejectedStrings[i])!=null);
+			if($(this).text().match(rejectedStrings[i])!=null&&!$(this).hasClass('check_passed')){
+				$(this).css('background','#ff8080').css('opacity','.5');
+				if(localStorage.getItem('hide_restricted')||localStorage.getItem('hide_restricted')=="true"){$(this).hide();}
+			}
 		}
 	}
 

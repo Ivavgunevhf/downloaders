@@ -112,7 +112,7 @@ function getStory(url, id) {
 			var author = doc.querySelector('#profile_top a').textContent;
 			var author_link = doc.querySelector('#profile_top a').href;
 			var story_link = url + '/1/';
-			var html_start = '<!DOCTYPE html>\n<html>\n<head>\n\t<title>' + title + ' by ' + author + '</title>\n\t<style>#origin_info{text-align:center;}#summary{border:1px solid;padding:15px;margin:15px;}.storytext{margin:35px}</style>\n</head>\n<body>\n\t<div id="origin_info">Orginally posted on FanFiction.Net at <a href="' + story_link + '">' + story_link + '</a> by <a href="' + author_link + '">' + author + '</a></div>\n\t';
+			var html_start = '<!DOCTYPE html>\n<html>\n<head>\n\t<meta charset="utf-8">\n\t<title>' + title + ' by ' + author + '</title>\n\t<style>#origin_info{text-align:center;}#summary{border:1px solid;padding:15px;margin:15px;}.storytext{margin:35px}</style>\n</head>\n<body>\n\t<div id="origin_info">Orginally posted on FanFiction.Net at <a href="' + story_link + '">' + story_link + '</a> by <a href="' + author_link + '">' + author + '</a></div>\n\t';
 			//console.log(html_start);
 			$('#html_start' + id).val(html_start);
 			$('#html_start' + id).val($('#html_start' + id).val() + '<div id="summary">' + storyInfo.replace(/\n\n*/g,'\n').replace(/\n/g, '<br>') + '</div>\n');
